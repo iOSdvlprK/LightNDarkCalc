@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MainCalculatorView.swift
 //  Calculator
 //
 //  Created by joe on 12/10/24.
@@ -7,7 +7,11 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct MainCalculatorView: View {
+    @State private var lightMode: Bool = true
+    @State private var currentComputation: String = ""
+    @State private var mainResult: String = "0"
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -20,5 +24,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    MainCalculatorView()
 }
