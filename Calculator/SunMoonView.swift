@@ -11,10 +11,24 @@ struct SunMoonView: View {
     var lightMode: Bool
     
     var body: some View {
-        Text("Sun Moon View")
+        HStack(spacing: 30) {
+            Image(systemName: "sun.min")
+                .imageScale(.large)
+                .foregroundStyle(lightMode ? sunOrMoonSelectedColor : sunOrMoonNotSelectedColor)
+            
+            Image(systemName: "moon")
+                .imageScale(.large)
+                .foregroundStyle(lightMode ? sunOrMoonNotSelectedColor : sunOrMoonSelectedColor)
+        }
+        .padding()
+        .background(secondaryBackgroundColor)
+        .cornerRadius(20)
     }
 }
 
 #Preview {
-    SunMoonView(lightMode: true)
+    VStack {
+        SunMoonView(lightMode: true)
+        SunMoonView(lightMode: false)
+    }
 }
