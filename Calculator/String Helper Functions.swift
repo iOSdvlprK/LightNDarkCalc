@@ -26,3 +26,11 @@ func formatResult(val: Double) -> String {
     return numberFormatter.string(from: NSNumber(value: val)) ?? "0"
 }
 
+func lastCharIsDigit(str: String) -> Bool {
+    return "0123456789".contains(getLastChar(str: str))
+}
+
+func lastCharIsDigitOrPercent(str: String) -> Bool {
+    return "0123456789%".contains(getLastChar(str: str))
+}
+
