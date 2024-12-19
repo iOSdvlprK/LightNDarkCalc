@@ -89,6 +89,17 @@ struct CalcsButtonsView: View {
             mainResult = "0"
         case .equal, .negative:
             print("eq/neg")
+            if !currentComputation.isEmpty {
+                if !lastCharacterIsAnOperator(str: currentComputation) {
+                    let sign = calcButton == .negative ? -1.0 : 1.0
+                    
+                    mainResult = formatResult(val: sign * calculateResults())
+                    
+                    if calcButton == .negative {
+                        currentComputation = mainResult
+                    }
+                }
+            }
         case .decimal:
             print("decimal")
         case .percent:
@@ -108,6 +119,25 @@ struct CalcsButtonsView: View {
             // Needs further implementation
             appendToCurrentComputation(calcButton: calcButton)
         }
+    }
+    
+    // Implements the actual computation
+    func calculateResults() -> Double {
+        let visibleWorkings: String = currentComputation
+        var workings = visibleWorkings.replacingOccurrences(of: "%", with: "*0.01")
+        workings = workings.replacingOccurrences(of: multiplySymbol, with: "*")
+        workings = workings.replacingOccurrences(of: divisionSymbol, with: "/")
+        
+        // If we have "35.", this will be replaced by "35.0"
+        if getLastChar(str: visibleWorkings) == "." {
+            workings += "0"
+        }
+        
+        // actual computation
+        let expr = NSExpression(format: workings)
+        let exprValue = expr.expressionValue(with: nil, context: nil) as! Double
+        
+        return exprValue
     }
     
     func appendToCurrentComputation(calcButton: CalcButton) {
