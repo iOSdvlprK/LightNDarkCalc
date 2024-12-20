@@ -63,7 +63,6 @@ struct CalcsButtonsView: View {
                         Button(
                             action: {
                                 // logic takes place here
-                                print("Button pressed")
                                 buttonPressed(calcButton: calcButtonModel.calcButton)
                             },
                             label: {
@@ -88,7 +87,6 @@ struct CalcsButtonsView: View {
             currentComputation = ""
             mainResult = "0"
         case .equal, .negative:
-            print("eq/neg")
             if !currentComputation.isEmpty {
                 if !lastCharacterIsAnOperator(str: currentComputation) {
                     let sign = calcButton == .negative ? -1.0 : 1.0
@@ -101,14 +99,36 @@ struct CalcsButtonsView: View {
                 }
             }
         case .decimal:
-            print("decimal")
+            if let lastOccurenceOfDecimal = currentComputation.lastIndex(of: ".") {
+                if lastCharIsDigit(str: currentComputation) {
+                    let startIndex = currentComputation.index(lastOccurenceOfDecimal, offsetBy: 1)
+                    let endIndex = currentComputation.endIndex
+                    let range = startIndex..<endIndex
+                    
+                    let rightSubString = String(currentComputation[range])
+                    
+                    // Only have digits to the right "."
+                    // that means do not add another "."
+                    // otherwise we can add another decimal point
+                    
+                    // 23.37+108 Good -> 23.37+108.
+                    // 123.45 Bad -> remains 123.45
+                    if Int(rightSubString) == nil && !rightSubString.isEmpty {
+                        currentComputation += "."
+                    }
+                }
+            } else {
+                if currentComputation.isEmpty {
+                    currentComputation += "0."
+                } else if lastCharIsDigit(str: currentComputation) {
+                    currentComputation += "."
+                }
+            }
         case .percent:
-            print("percent")
             if lastCharIsDigit(str: currentComputation) {
                 appendToCurrentComputation(calcButton: calcButton)
             }
         case .undo:
-            print("undo")
             currentComputation = String(currentComputation.dropLast())
         case .add, .subtract, .multiply, .divide:
             // Needs further implementation
